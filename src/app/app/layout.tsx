@@ -1,31 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import {
   BrainCircuit,
   BookOpen,
   Bot,
   BarChart3,
   TrendingUp,
-  Settings,
   Users,
   CreditCard,
   Sparkles,
   ExternalLink,
-  ChevronRight,
   ShieldCheck,
   PlayCircle,
   Sun,
   Moon,
   Building2,
   Lock,
+  LogOut,
 } from "lucide-react";
+import { useTranslation, LanguageSwitcher } from "@/lib/i18n/LanguageContext";
+import { useAuth } from "@/lib/auth/AuthContext";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { t, language } = useTranslation();
+  const { user, isAuthenticated, openAuthModal, logout } = useAuth();
   const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     const html = document.documentElement;
@@ -40,46 +49,81 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     {
-      name: "База знаний",
+      name: t.app.knowledgeBase,
       href: "/app/knowledge-base",
       icon: BookOpen,
       count: "4",
     },
     {
-      name: "Подключение ботов",
+      name: t.app.bots,
       href: "/app/bots",
       icon: Bot,
       badge: "Slack & TG",
     },
     {
-      name: "Неотвеченные вопросы",
+      name: t.app.analytics,
       href: "/app/analytics",
       icon: BarChart3,
       alert: "3",
     },
     {
-      name: "Глубокие инсайты",
+      name: t.app.insights,
       href: "/app/analytics/insights",
       icon: TrendingUp,
       scaleOnly: true,
     },
     {
-      name: "RAG Playground",
+      name: t.app.playground,
       href: "/app/playground",
       icon: PlayCircle,
       highlight: true,
     },
     {
-      name: "Команда админов",
+      name: t.app.team,
       href: "/app/settings/team",
       icon: Users,
     },
-    {
-      name: "Тариф и биллинг",
-      href: "/app/settings/billing",
-      icon: CreditCard,
-    },
   ];
+
+  if (mounted && !isAuthenticated) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAFAFB] dark:bg-[#0F1117] px-4 text-center">
+        <div className="max-w-md w-full p-8 rounded-3xl bg-white dark:bg-[#161922] border border-gray-200 dark:border-gray-800 shadow-xl space-y-5">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 flex items-center justify-center mx-auto">
+            <Lock className="w-6 h-6" />
+          </div>
+          <h2 className="font-heading font-extrabold text-2xl text-gray-900 dark:text-white">
+            {language === "en" ? "Authentication Required" : "Требуется авторизация"}
+          </h2>
+          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            {language === "en"
+              ? "All company dashboard functions, knowledge base management, and bot integrations are available only after registration or sign in."
+              : "Все функции управления базой знаний компании, подключение ботов и RAG-песочница доступны только после регистрации или входа в личный кабинет."}
+          </p>
+          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => openAuthModal("login")}
+              className="flex-1 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 text-xs font-semibold text-gray-800 dark:text-white hover:bg-gray-50"
+            >
+              {language === "en" ? "Sign In" : "Войти"}
+            </button>
+            <button
+              onClick={() => openAuthModal("register")}
+              className="flex-1 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-semibold shadow-md"
+            >
+              {language === "en" ? "Register" : "Регистрация"}
+            </button>
+          </div>
+          <Link
+            href="/"
+            className="block text-xs text-indigo-600 dark:text-indigo-400 hover:underline pt-2 font-medium"
+          >
+            ← {language === "en" ? "Back to Homepage" : "Вернуться на главную страницу"}
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFB] dark:bg-[#0F1117] text-gray-900 dark:text-gray-100">
@@ -98,10 +142,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800/80 text-xs">
             <Building2 className="w-3.5 h-3.5 text-gray-500" />
             <span className="font-semibold text-gray-800 dark:text-gray-200">
-              Acme Technologies
+              {user?.company_name || "Acme Technologies"}
             </span>
             <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400 font-bold">
-              Team
+              Active
             </span>
           </div>
         </div>
@@ -112,8 +156,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-xs font-semibold hover:bg-indigo-100 transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Тест RAG бота</span>
+            <span>{t.app.playground}</span>
           </Link>
+
+          <LanguageSwitcher />
 
           <button
             onClick={toggleTheme}
@@ -123,11 +169,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
+          <button
+            onClick={logout}
+            className="p-2 rounded-lg text-gray-400 hover:text-red-600 transition-colors"
+            title="Выйти из аккаунта"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+
           <Link
             href="/"
             className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center gap-1"
           >
-            <span>На сайт</span>
+            <span>{t.app.toSite}</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -139,7 +193,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <aside className="w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161922] p-4 flex flex-col justify-between hidden md:flex shrink-0">
           <div className="space-y-1">
             <div className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-gray-400">
-              Управление базой
+              {language === "en" ? "Knowledge Management" : "Управление базой"}
             </div>
 
             {navItems.map((item) => {
@@ -176,12 +230,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                       {item.alert}
                     </span>
                   )}
-                  {item.scaleOnly && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-semibold flex items-center gap-1">
-                      <Lock className="w-2.5 h-2.5" />
-                      Scale
-                    </span>
-                  )}
                   {item.highlight && (
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   )}
@@ -195,21 +243,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center justify-between text-xs font-semibold text-gray-800 dark:text-gray-200">
               <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                tenant_id активен
+                tenant_id active
               </span>
             </div>
             <div className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">
-              Лимит Team: 4 из 50 документов загружено.
+              {language === "en"
+                ? "Company knowledge base isolated & indexed."
+                : "База знаний компании изолирована и проиндексирована."}
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-indigo-600 h-full w-[8%]" />
+            <div className="text-[10px] text-gray-400 flex items-center gap-1 pt-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <span>Google Gemini AI Engine</span>
             </div>
-            <Link
-              href="/app/settings/billing"
-              className="block text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline pt-1"
-            >
-              Улучшить до Scale →
-            </Link>
           </div>
         </aside>
 

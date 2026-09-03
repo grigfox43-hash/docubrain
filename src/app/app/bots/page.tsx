@@ -36,6 +36,14 @@ export default function BotsPage() {
       .then((r) => r.json())
       .then((data) => setManifestJson(JSON.stringify(data, null, 2)))
       .catch(() => {});
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setManifestModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const handleConnectTelegram = async (e: React.FormEvent) => {
@@ -309,8 +317,14 @@ export default function BotsPage() {
 
       {/* MODAL: Slack Manifest View */}
       {manifestModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#161922] border border-gray-200 dark:border-gray-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+        <div
+          onClick={() => setManifestModalOpen(false)}
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white dark:bg-[#161922] border border-gray-200 dark:border-gray-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200"
+          >
             <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
               <h3 className="font-heading font-bold text-base text-gray-900 dark:text-white">
                 Slack App Manifest (JSON)

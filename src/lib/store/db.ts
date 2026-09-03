@@ -408,6 +408,19 @@ class DatabaseStore {
     if (existing) {
       existing.frequency += 1;
       existing.updated_at = new Date().toISOString();
+
+      // Async persist to MongoDB
+      import("./mongo").then(({ getMongoDb }) => {
+        getMongoDb().then((mongo) => {
+          if (mongo) {
+            mongo.collection("unanswered_questions").updateOne(
+              { id: existing.id },
+              { $set: { frequency: existing.frequency, updated_at: existing.updated_at } }
+            ).catch(console.error);
+          }
+        });
+      });
+
       return existing;
     }
 
@@ -423,6 +436,16 @@ class DatabaseStore {
 
     list.unshift(newQuestion);
     this.unansweredQuestions.set(tenantId, list);
+
+    // Async persist to MongoDB
+    import("./mongo").then(({ getMongoDb }) => {
+      getMongoDb().then((mongo) => {
+        if (mongo) {
+          mongo.collection("unanswered_questions").insertOne(newQuestion).catch(console.error);
+        }
+      });
+    });
+
     return newQuestion;
   }
 
@@ -432,6 +455,19 @@ class DatabaseStore {
     if (q) {
       q.status = status;
       q.updated_at = new Date().toISOString();
+
+      // Async persist to MongoDB
+      import("./mongo").then(({ getMongoDb }) => {
+        getMongoDb().then((mongo) => {
+          if (mongo) {
+            mongo.collection("unanswered_questions").updateOne(
+              { id: questionId },
+              { $set: { status, updated_at: q.updated_at } }
+            ).catch(console.error);
+          }
+        });
+      });
+
       return true;
     }
     return false;
@@ -451,6 +487,16 @@ class DatabaseStore {
     };
     list.unshift(newLog);
     this.queryLogs.set(log.tenant_id, list);
+
+    // Async persist to MongoDB
+    import("./mongo").then(({ getMongoDb }) => {
+      getMongoDb().then((mongo) => {
+        if (mongo) {
+          mongo.collection("query_logs").insertOne(newLog).catch(console.error);
+        }
+      });
+    });
+
     return newLog;
   }
 }

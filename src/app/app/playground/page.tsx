@@ -82,7 +82,7 @@ export default function PlaygroundPage() {
             RAG Тест & Песочница
           </h1>
           <span className="px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
-            Gemini 3.5 Active
+            Google Gemini Active
           </span>
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">

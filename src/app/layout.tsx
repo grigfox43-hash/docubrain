@@ -1,24 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-sora",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-mono",
-  display: "swap",
-});
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
+import { AuthProvider } from "@/lib/auth/AuthContext";
+import { AuthModal } from "@/components/AuthModal";
 
 export const metadata: Metadata = {
   title: "DocuBrain — Корпоративный AI-ассистент по регламентам без риска утечки данных",
@@ -32,7 +16,7 @@ export const metadata: Metadata = {
     "Telegram бот",
     "AI регламенты",
     "Qdrant",
-    "Gemini AI",
+    "Google Gemini",
     "изоляция данных",
   ],
   authors: [{ name: "DocuBrain Team" }],
@@ -52,9 +36,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen antialiased bg-[#FAFAFB] text-[#111827] dark:bg-[#0F1117] dark:text-[#F3F4F6] transition-colors duration-200">
-        {children}
+    <html lang="ru" className="scroll-smooth">
+      <body className="min-h-screen antialiased bg-[#FAFAFB] text-[#111827] dark:bg-[#0F1117] dark:text-[#F3F4F6] transition-colors duration-200 font-sans">
+        <LanguageProvider>
+          <AuthProvider>
+            {children}
+            <AuthModal />
+          </AuthProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

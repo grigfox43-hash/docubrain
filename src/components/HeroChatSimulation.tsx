@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Send, FileText, CheckCircle2, Shield, Bot, User, Hash, Sparkles } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 interface Message {
   sender: "user" | "bot";
@@ -12,14 +13,14 @@ interface Message {
 }
 
 export function HeroChatSimulation() {
+  const { t, language } = useTranslation();
   const [platform, setPlatform] = useState<"slack" | "telegram">("slack");
   const [step, setStep] = useState<number>(0);
   const [inputVal, setInputVal] = useState("");
   const [customAnswer, setCustomAnswer] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Scripted simulation sequence
-  const initialMessages: Message[] = [
+  const initialMessagesRu: Message[] = [
     {
       sender: "user",
       text: "Привет! Если я заболел на 1 день, мне нужно обязательно оформлять больничный у врача?",
@@ -28,7 +29,7 @@ export function HeroChatSimulation() {
     {
       sender: "bot",
       text: "Нет, оформлять больничный лист не требуется. Компания предоставляет до 4 дней в год (Sick Days / Дни здоровья) без больничного листа.\n\nДо 10:00 напишите тимлиду и поставьте статус 🤒 в Slack в канале #general.",
-      sourceDoc: "Регламент отпусков и больничных 2026",
+      sourceDoc: "Регламент отпусков и больничных",
       sourceSection: "Раздел 2. Дни здоровья без больничного",
       time: "10:14",
     },
@@ -40,20 +41,48 @@ export function HeroChatSimulation() {
     {
       sender: "bot",
       text: "Да, можно. Общий оплачиваемый отпуск составляет 28 дней. Главное условие регламента: одна из частей отпуска должна быть не менее 14 дней подряд. Заявление необходимо подать за 14 рабочих дней через HR-портал.",
-      sourceDoc: "Регламент отпусков и больничных 2026",
+      sourceDoc: "Регламент отпусков и больничных",
       sourceSection: "Раздел 1. Ежегодный оплачиваемый отпуск",
       time: "10:16",
     },
   ];
 
-  // Staggered reveal effect on load
+  const initialMessagesEn: Message[] = [
+    {
+      sender: "user",
+      text: "Hi! If I'm sick for 1 day, do I need to get an official doctor's note?",
+      time: "10:14",
+    },
+    {
+      sender: "bot",
+      text: "No, a doctor's sick note is not required. The company provides up to 4 days per year (Sick Days) without a formal note.\n\nJust notify your team lead before 10:00 AM and set your status to 🤒 in Slack #general.",
+      sourceDoc: "Vacations & Sick Leave Policy",
+      sourceSection: "Section 2. Sick Days Without Certificate",
+      time: "10:14",
+    },
+    {
+      sender: "user",
+      text: "Can I take 20 consecutive days of vacation in summer?",
+      time: "10:16",
+    },
+    {
+      sender: "bot",
+      text: "Yes, you can. Annual paid leave is 28 calendar days. The main requirement is that at least one part of the vacation must be 14+ consecutive days. Submit your request 14 working days in advance via HR portal.",
+      sourceDoc: "Vacations & Sick Leave Policy",
+      sourceSection: "Section 1. Annual Paid Leave",
+      time: "10:16",
+    },
+  ];
+
+  const initialMessages = language === "en" ? initialMessagesEn : initialMessagesRu;
+
   useEffect(() => {
-    const t1 = setTimeout(() => setStep(1), 600); // user msg 1
-    const t2 = setTimeout(() => setStep(2), 1600); // typing bot 1
-    const t3 = setTimeout(() => setStep(3), 2800); // bot msg 1
-    const t4 = setTimeout(() => setStep(4), 4200); // user msg 2
-    const t5 = setTimeout(() => setStep(5), 5200); // typing bot 2
-    const t6 = setTimeout(() => setStep(6), 6400); // bot msg 2
+    const t1 = setTimeout(() => setStep(1), 500);
+    const t2 = setTimeout(() => setStep(2), 1400);
+    const t3 = setTimeout(() => setStep(3), 2500);
+    const t4 = setTimeout(() => setStep(4), 3800);
+    const t5 = setTimeout(() => setStep(5), 4800);
+    const t6 = setTimeout(() => setStep(6), 6000);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -82,14 +111,18 @@ export function HeroChatSimulation() {
       const data = await res.json();
       setCustomAnswer(data.answer || "Ответ получен.");
     } catch {
-      setCustomAnswer("Не удалось связаться с базой знаний. Попробуйте еще раз.");
+      setCustomAnswer(
+        language === "en"
+          ? "Unable to reach knowledge base. Please try again."
+          : "Не удалось связаться с базой знаний. Попробуйте еще раз."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div id="demo" className="w-full max-w-2xl mx-auto scroll-mt-28">
       {/* Simulation Window Container */}
       <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161922] shadow-xl overflow-hidden transition-all">
         {/* Window Top Bar with Platform Switcher */}
@@ -148,7 +181,7 @@ export function HeroChatSimulation() {
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
                   <span className="text-xs font-semibold text-gray-900 dark:text-white">
-                    Михаил (Frontend Dev)
+                    {language === "en" ? "Michael (Frontend Dev)" : "Михаил (Frontend Dev)"}
                   </span>
                   <span className="text-[10px] text-gray-400">10:14</span>
                 </div>
@@ -164,7 +197,11 @@ export function HeroChatSimulation() {
             <div className="flex items-center gap-3 pl-11">
               <div className="px-3 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/40 flex items-center gap-1.5 text-xs text-indigo-700 dark:text-indigo-300">
                 <Bot className="w-3.5 h-3.5 animate-spin" />
-                <span>DocuBrain ищет в регламентах...</span>
+                <span>
+                  {language === "en"
+                    ? "DocuBrain searching regulations..."
+                    : "DocuBrain ищет в регламентах..."}
+                </span>
                 <span className="flex gap-1 ml-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dot-pulse-1" />
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dot-pulse-2" />
@@ -192,7 +229,6 @@ export function HeroChatSimulation() {
                 </div>
                 <div className="p-3.5 rounded-2xl rounded-tl-sm bg-indigo-50/50 dark:bg-[#191D28] border border-indigo-100/80 dark:border-indigo-900/40 text-sm text-gray-800 dark:text-gray-200 leading-relaxed shadow-xs whitespace-pre-line">
                   {initialMessages[1].text}
-                  {/* Citation Box */}
                   <div className="mt-3 pt-2.5 border-t border-indigo-100 dark:border-indigo-900/60 flex items-center justify-between text-xs text-indigo-900/80 dark:text-indigo-300">
                     <span className="flex items-center gap-1.5 font-medium truncate">
                       <FileText className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
@@ -200,7 +236,7 @@ export function HeroChatSimulation() {
                     </span>
                     <span className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 shrink-0 font-medium">
                       <CheckCircle2 className="w-3 h-3" />
-                      Точный RAG (0.94)
+                      RAG Verified
                     </span>
                   </div>
                 </div>
@@ -217,7 +253,7 @@ export function HeroChatSimulation() {
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
                   <span className="text-xs font-semibold text-gray-900 dark:text-white">
-                    Михаил (Frontend Dev)
+                    {language === "en" ? "Michael (Frontend Dev)" : "Михаил (Frontend Dev)"}
                   </span>
                   <span className="text-[10px] text-gray-400">10:16</span>
                 </div>
@@ -233,7 +269,11 @@ export function HeroChatSimulation() {
             <div className="flex items-center gap-3 pl-11">
               <div className="px-3 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/40 flex items-center gap-1.5 text-xs text-indigo-700 dark:text-indigo-300">
                 <Bot className="w-3.5 h-3.5 animate-spin" />
-                <span>Генерация ответа строго по документам...</span>
+                <span>
+                  {language === "en"
+                    ? "Generating answer strictly from company context..."
+                    : "Генерация ответа строго по документам..."}
+                </span>
               </div>
             </div>
           )}
@@ -260,7 +300,7 @@ export function HeroChatSimulation() {
                     </span>
                     <span className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 shrink-0 font-medium">
                       <CheckCircle2 className="w-3 h-3" />
-                      Точный RAG (0.91)
+                      RAG Verified
                     </span>
                   </div>
                 </div>
@@ -268,7 +308,7 @@ export function HeroChatSimulation() {
             </div>
           )}
 
-          {/* Live custom response if user tested */}
+          {/* Live custom response */}
           {customAnswer && (
             <div className="flex items-start gap-3 animate-in fade-in duration-200">
               <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
@@ -276,7 +316,7 @@ export function HeroChatSimulation() {
               </div>
               <div className="flex-1">
                 <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  Тестовый ответ RAG (Gemini 3.5)
+                  {language === "en" ? "Google Gemini RAG Answer" : "Ответ RAG (Google Gemini)"}
                 </span>
                 <div className="mt-1 p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-sm text-gray-800 dark:text-gray-200">
                   {customAnswer}
@@ -295,7 +335,7 @@ export function HeroChatSimulation() {
             type="text"
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
-            placeholder="Задайте реальный вопрос боту (например: 'Какой бюджет на обучение?')"
+            placeholder={t.hero.chatPlaceholder}
             className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-400"
           />
           <button
@@ -307,7 +347,7 @@ export function HeroChatSimulation() {
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
               <>
-                <span>Спросить</span>
+                <span>{t.hero.askButton}</span>
                 <Send className="w-3.5 h-3.5" />
               </>
             )}
@@ -316,15 +356,15 @@ export function HeroChatSimulation() {
       </div>
 
       {/* Trust pill under simulation */}
-      <div className="mt-4 flex items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-400">
         <span className="flex items-center gap-1">
           <Shield className="w-3.5 h-3.5 text-emerald-600" />
-          Данные не покидают периметр компании
+          {t.hero.trust1}
         </span>
         <span>•</span>
-        <span>Строгий фильтр tenant_id</span>
+        <span>{t.hero.trust2}</span>
         <span>•</span>
-        <span>Без галлюцинаций</span>
+        <span>{t.hero.trust3}</span>
       </div>
     </div>
   );

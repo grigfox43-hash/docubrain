@@ -137,7 +137,7 @@ export default function HowItWorksPage() {
                     Генерация ответа со ссылкой на первоисточник
                   </h3>
                   <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300">
-                    Gemini 3.5 Flash
+                    Google Gemini
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
