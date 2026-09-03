@@ -1,59 +1,162 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  baseRadius: number;
+  color: string;
+  pulseSpeed: number;
+  pulsePhase: number;
+}
+
 export function NeuralBackground() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = canvas.parentElement?.clientWidth || window.innerWidth);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas || !canvas.parentElement) return;
+      width = canvas.width = canvas.parentElement.clientWidth;
+      height = canvas.height = canvas.parentElement.clientHeight;
+      initParticles();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    const colors = [
+      "rgba(99, 102, 241, ", // Indigo
+      "rgba(129, 140, 248, ", // Light indigo
+      "rgba(67, 56, 202, ",  // Deep indigo
+      "rgba(16, 185, 129, ", // Emerald accent
+    ];
+
+    let particles: Particle[] = [];
+    const particleCount = Math.min(Math.floor((width * height) / 22000), 55);
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        const baseRadius = Math.random() * 2.5 + 2.5;
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.75,
+          vy: (Math.random() - 0.5) * 0.75,
+          radius: baseRadius,
+          baseRadius,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          pulseSpeed: Math.random() * 0.03 + 0.015,
+          pulsePhase: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    initParticles();
+
+    const maxDistance = 140;
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Update and draw particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        // Move
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Bounce gently off bounds
+        if (p.x < 0) {
+          p.x = 0;
+          p.vx *= -1;
+        } else if (p.x > width) {
+          p.x = width;
+          p.vx *= -1;
+        }
+
+        if (p.y < 0) {
+          p.y = 0;
+          p.vy *= -1;
+        } else if (p.y > height) {
+          p.y = height;
+          p.vy *= -1;
+        }
+
+        // Pulse radius
+        p.pulsePhase += p.pulseSpeed;
+        p.radius = p.baseRadius + Math.sin(p.pulsePhase) * 1.2;
+
+        // Draw node
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(p.radius, 1.5), 0, Math.PI * 2);
+        ctx.fillStyle = p.color + "0.85)";
+        ctx.fill();
+
+        // Subtle glow halo
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = p.color + "0.15)";
+        ctx.fill();
+
+        // 2. Connect to close neighboring particles
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxDistance) {
+            const alpha = (1 - dist / maxDistance) * 0.45;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden select-none -z-10 opacity-60 dark:opacity-30">
-      <svg
-        className="w-full h-full"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1440 900"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        <defs>
-          <linearGradient id="neural-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#4338CA" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#818CF8" stopOpacity="0.05" />
-          </linearGradient>
-          <linearGradient id="neural-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#16A34A" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#4338CA" stopOpacity="0.05" />
-          </linearGradient>
-        </defs>
+    <div className="absolute inset-0 pointer-events-none overflow-hidden select-none -z-10">
+      {/* Ambient background blur lights */}
+      <div className="absolute -top-32 left-1/4 w-96 h-96 bg-indigo-500/15 dark:bg-indigo-600/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/3 -right-20 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-600/5 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 left-1/3 w-80 h-80 bg-purple-500/10 dark:bg-purple-600/10 rounded-full blur-3xl" />
 
-        {/* Soft atmospheric gradient blur lights */}
-        <circle cx="280" cy="240" r="320" fill="url(#neural-grad-1)" filter="blur(70px)" />
-        <circle cx="1180" cy="380" r="340" fill="url(#neural-grad-2)" filter="blur(80px)" />
-
-        {/* Neural Network Nodes & Links */}
-        <g stroke="#6366F1" strokeWidth="1" strokeDasharray="3 3" opacity="0.35" className="animate-pulse">
-          <line x1="220" y1="200" x2="380" y2="160" />
-          <line x1="380" y1="160" x2="520" y2="280" />
-          <line x1="520" y1="280" x2="350" y2="380" />
-          <line x1="350" y1="380" x2="220" y2="200" />
-          <line x1="380" y1="160" x2="680" y2="190" />
-          <line x1="680" y1="190" x2="820" y2="310" />
-          <line x1="820" y1="310" x2="980" y2="220" />
-          <line x1="980" y1="220" x2="1140" y2="340" />
-          <line x1="1140" y1="340" x2="1280" y2="210" />
-          <line x1="820" y1="310" x2="650" y2="440" />
-          <line x1="650" y1="440" x2="520" y2="280" />
-          <line x1="980" y1="220" x2="880" y2="460" />
-          <line x1="880" y1="460" x2="1140" y2="340" />
-        </g>
-
-        {/* Connected document nodes */}
-        <g fill="#4338CA">
-          <circle cx="220" cy="200" r="5" opacity="0.8" />
-          <circle cx="380" cy="160" r="7" opacity="0.9" />
-          <circle cx="520" cy="280" r="8" opacity="0.85" />
-          <circle cx="350" cy="380" r="6" opacity="0.75" />
-          <circle cx="680" cy="190" r="9" opacity="0.95" />
-          <circle cx="820" cy="310" r="10" opacity="0.9" fill="#16A34A" />
-          <circle cx="650" cy="440" r="6" opacity="0.7" />
-          <circle cx="980" cy="220" r="7" opacity="0.85" />
-          <circle cx="880" cy="460" r="6" opacity="0.75" />
-          <circle cx="1140" cy="340" r="8" opacity="0.8" />
-          <circle cx="1280" cy="210" r="5" opacity="0.65" />
-        </g>
-      </svg>
+      {/* 60fps Canvas Animation with moving nodes & lines */}
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full opacity-70 dark:opacity-40"
+      />
     </div>
   );
 }
