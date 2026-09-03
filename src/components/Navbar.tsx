@@ -5,14 +5,15 @@ import { useState, useEffect } from "react";
 import { BrainCircuit, ShieldCheck, Sparkles, Menu, X, ArrowRight, Sun, Moon, LogIn, LogOut, User } from "lucide-react";
 import { useTranslation, LanguageSwitcher } from "@/lib/i18n/LanguageContext";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { useTheme } from "@/lib/theme/ThemeContext";
 
 export function Navbar() {
   const { t } = useTranslation();
   const { user, isAuthenticated, openAuthModal, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,17 +22,6 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    const html = document.documentElement;
-    if (html.classList.contains("dark")) {
-      html.classList.remove("dark");
-      setIsDark(false);
-    } else {
-      html.classList.add("dark");
-      setIsDark(true);
-    }
-  };
 
   const handleSmoothAnchor = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     // If on another page, let standard routing handle it
