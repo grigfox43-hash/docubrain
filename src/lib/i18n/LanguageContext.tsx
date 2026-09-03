@@ -53,7 +53,7 @@ export function useTranslation() {
   return useContext(LanguageContext);
 }
 
-// Vector SVG Russian Flag with permanent non-collapsible dimensions
+// Vector SVG Russian Flag (20x14)
 export function RussianFlag() {
   return (
     <svg
@@ -62,18 +62,17 @@ export function RussianFlag() {
       viewBox="0 0 20 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0 rounded-[2px] shadow-2xs border border-black/25 dark:border-white/30 overflow-hidden"
+      className="shrink-0 rounded-[2px] shadow-2xs overflow-hidden border border-black/15"
       style={{ width: "20px", height: "14px", minWidth: "20px", minHeight: "14px", display: "inline-block" }}
     >
       <rect width="20" height="4.67" fill="#FFFFFF" />
       <rect y="4.67" width="20" height="4.67" fill="#0039A6" />
       <rect y="9.33" width="20" height="4.67" fill="#D52B1E" />
-      <line x1="0" y1="4.67" x2="20" y2="4.67" stroke="#000000" strokeOpacity="0.08" strokeWidth="0.5" />
     </svg>
   );
 }
 
-// Vector SVG United Kingdom Flag with permanent non-collapsible dimensions
+// Vector SVG United Kingdom Flag (20x14)
 export function BritishFlag() {
   return (
     <svg
@@ -82,7 +81,7 @@ export function BritishFlag() {
       viewBox="0 0 60 42"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0 rounded-[2px] shadow-2xs border border-black/25 dark:border-white/30 overflow-hidden"
+      className="shrink-0 rounded-[2px] shadow-2xs overflow-hidden border border-black/15"
       style={{ width: "20px", height: "14px", minWidth: "20px", minHeight: "14px", display: "inline-block" }}
     >
       <rect width="60" height="42" fill="#012169" />
@@ -98,33 +97,33 @@ export function LanguageSwitcher() {
   const { language, setLanguage } = useTranslation();
 
   return (
-    <div className="inline-flex items-center gap-1.5 p-1 rounded-xl bg-gray-100/90 dark:bg-[#161922] border border-gray-200/90 dark:border-gray-800 shadow-2xs">
+    <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-[#161922] border border-gray-200 dark:border-gray-800 shadow-inner">
       <button
         onClick={() => setLanguage("ru")}
-        className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all ${
           language === "ru"
-            ? "bg-white text-gray-950 shadow-xs font-bold border border-gray-200/90 dark:bg-[#252C3E] dark:text-white dark:border-indigo-500/40"
-            : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-transparent hover:bg-white/40 dark:hover:bg-gray-800/40"
+            ? "bg-indigo-700 text-white dark:bg-indigo-600 dark:text-white font-bold shadow-xs"
+            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/60 dark:hover:bg-gray-800/60 font-medium"
         }`}
         title="Русский язык"
         type="button"
       >
         <RussianFlag />
-        <span className="tracking-wide text-xs font-bold leading-none">RU</span>
+        <span className="tracking-wider text-xs font-bold leading-none">RU</span>
       </button>
 
       <button
         onClick={() => setLanguage("en")}
-        className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all ${
           language === "en"
-            ? "bg-white text-gray-950 shadow-xs font-bold border border-gray-200/90 dark:bg-[#252C3E] dark:text-white dark:border-indigo-500/40"
-            : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-transparent hover:bg-white/40 dark:hover:bg-gray-800/40"
+            ? "bg-indigo-700 text-white dark:bg-indigo-600 dark:text-white font-bold shadow-xs"
+            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/60 dark:hover:bg-gray-800/60 font-medium"
         }`}
         title="English"
         type="button"
       >
         <BritishFlag />
-        <span className="tracking-wide text-xs font-bold leading-none">EN</span>
+        <span className="tracking-wider text-xs font-bold leading-none">EN</span>
       </button>
     </div>
   );
