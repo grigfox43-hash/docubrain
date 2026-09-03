@@ -37,6 +37,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-screen antialiased bg-[#FAFAFB] text-[#111827] dark:bg-[#0F1117] dark:text-[#F3F4F6] transition-colors duration-200 font-sans">
         <LanguageProvider>
           <AuthProvider>

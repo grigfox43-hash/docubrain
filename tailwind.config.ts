@@ -32,9 +32,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
-        heading: ["var(--font-sora)", "Inter Tight", "Sora", "sans-serif"],
-        mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        heading: ["Sora", "Inter", "-apple-system", "sans-serif"],
+        mono: ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "monospace"],
       },
     },
   },
