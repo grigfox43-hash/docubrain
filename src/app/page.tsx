@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -44,6 +45,23 @@ export default function HomePage() {
       openAuthModal("register");
     }
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const targetId = window.location.hash.replace("#", "");
+      const elem = document.getElementById(targetId);
+      if (elem) {
+        setTimeout(() => {
+          const navHeight = 84;
+          const targetTop = elem.getBoundingClientRect().top + window.pageYOffset - navHeight;
+          window.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior: "smooth",
+          });
+        }, 150);
+      }
+    }
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
@@ -99,7 +117,7 @@ export default function HomePage() {
       {/* 2. HOW IT WORKS (Anchor id="how-it-works") */}
       <section
         id="how-it-works"
-        className="py-20 bg-white dark:bg-[#12151E] border-y border-gray-200/80 dark:border-gray-800/80 scroll-mt-20"
+        className="py-20 bg-white dark:bg-[#12151E] border-y border-gray-200/80 dark:border-gray-800/80 scroll-mt-24"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -172,7 +190,7 @@ export default function HomePage() {
       {/* 3. SECURITY ACCENT SECTION (Anchor id="security") */}
       <section
         id="security"
-        className="py-24 relative overflow-hidden bg-gray-900 text-white scroll-mt-20"
+        className="py-24 relative overflow-hidden bg-gray-900 text-white scroll-mt-24"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -467,7 +485,7 @@ const searchResult = await qdrant.search({
       {/* 6. FAQ ACCORDION (Anchor id="faq") */}
       <section
         id="faq"
-        className="py-20 bg-white dark:bg-[#12151E] border-t border-gray-200/80 dark:border-gray-800/80 scroll-mt-20"
+        className="py-20 bg-white dark:bg-[#12151E] border-t border-gray-200/80 dark:border-gray-800/80 scroll-mt-24"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">

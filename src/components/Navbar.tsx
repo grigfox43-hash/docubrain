@@ -24,15 +24,26 @@ export function Navbar() {
   }, []);
 
   const handleSmoothAnchor = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    // If on another page, let standard routing handle it
-    if (window.location.pathname !== "/") return;
+    if (typeof window === "undefined") return;
 
-    e.preventDefault();
-    const elem = document.getElementById(targetId);
-    if (elem) {
-      elem.scrollIntoView({ behavior: "smooth" });
+    const isHomePage = window.location.pathname === "/" || window.location.pathname === "";
+
+    if (isHomePage) {
+      e.preventDefault();
+      const elem = document.getElementById(targetId);
+      if (elem) {
+        const navHeight = 84;
+        const targetTop = elem.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: "smooth",
+        });
+        window.history.pushState(null, "", `#${targetId}`);
+      }
+      setMobileMenuOpen(false);
+    } else {
+      setMobileMenuOpen(false);
     }
-    setMobileMenuOpen(false);
   };
 
   return (
