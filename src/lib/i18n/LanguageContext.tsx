@@ -48,10 +48,10 @@ export function useTranslation() {
 }
 
 // Vector SVG Russian Flag (White, Blue, Red)
-export function RussianFlag({ className = "w-4 h-3" }: { className?: string }) {
+export function RussianFlag({ className = "w-[18px] h-[13px]" }: { className?: string }) {
   return (
     <svg
-      className={`${className} rounded-xs overflow-hidden shadow-xs border border-gray-300/60 dark:border-gray-600/60 shrink-0 inline-block`}
+      className={`${className} rounded-[3px] overflow-hidden shadow-xs ring-1 ring-black/10 dark:ring-white/25 shrink-0 inline-block`}
       viewBox="0 0 640 480"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -65,10 +65,10 @@ export function RussianFlag({ className = "w-4 h-3" }: { className?: string }) {
 }
 
 // Vector SVG United Kingdom Flag (Union Jack)
-export function BritishFlag({ className = "w-4 h-3" }: { className?: string }) {
+export function BritishFlag({ className = "w-[18px] h-[13px]" }: { className?: string }) {
   return (
     <svg
-      className={`${className} rounded-xs overflow-hidden shadow-xs border border-gray-300/60 dark:border-gray-600/60 shrink-0 inline-block`}
+      className={`${className} rounded-[3px] overflow-hidden shadow-xs ring-1 ring-black/10 dark:ring-white/25 shrink-0 inline-block`}
       viewBox="0 0 640 480"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -91,32 +91,32 @@ export function LanguageSwitcher() {
   const { language, setLanguage } = useTranslation();
 
   return (
-    <div className="flex items-center p-0.5 rounded-xl bg-gray-100 dark:bg-gray-800/90 border border-gray-200/80 dark:border-gray-700/60 text-xs font-semibold">
+    <div className="flex items-center p-1 rounded-xl bg-gray-100/90 dark:bg-[#161922] border border-gray-200/80 dark:border-gray-800 shadow-inner text-xs font-semibold">
       <button
         onClick={() => setLanguage("ru")}
-        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all ${
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all ${
           language === "ru"
-            ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-xs font-bold"
-            : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+            ? "bg-white text-gray-900 border-gray-200/80 shadow-xs dark:bg-[#222838] dark:text-white dark:border-indigo-500/40 dark:shadow-[0_0_12px_rgba(99,102,241,0.25)] font-bold"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-transparent hover:bg-white/50 dark:hover:bg-gray-800/50"
         }`}
         title="Русский язык"
         type="button"
       >
-        <RussianFlag className="w-4 h-3" />
+        <RussianFlag />
         <span className="text-[11px] tracking-wide">RU</span>
       </button>
 
       <button
         onClick={() => setLanguage("en")}
-        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all ${
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all ${
           language === "en"
-            ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-xs font-bold"
-            : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+            ? "bg-white text-gray-900 border-gray-200/80 shadow-xs dark:bg-[#222838] dark:text-white dark:border-indigo-500/40 dark:shadow-[0_0_12px_rgba(99,102,241,0.25)] font-bold"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-transparent hover:bg-white/50 dark:hover:bg-gray-800/50"
         }`}
         title="English"
         type="button"
       >
-        <BritishFlag className="w-4 h-3" />
+        <BritishFlag />
         <span className="text-[11px] tracking-wide">EN</span>
       </button>
     </div>

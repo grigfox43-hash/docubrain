@@ -69,12 +69,6 @@ export function AuthModal() {
     }
   };
 
-  const handleFillDemo = () => {
-    setEmail("alex.hr@acmetech.io");
-    setPassword("demo2026");
-    setActiveTab("login");
-  };
-
   return (
     <div
       onClick={closeAuthModal}
@@ -229,14 +223,6 @@ export function AuthModal() {
             </div>
           </div>
 
-          {/* Quick Demo button */}
-          <button
-            type="button"
-            onClick={handleFillDemo}
-            className="w-full p-2.5 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/40 text-[11px] text-indigo-700 dark:text-indigo-300 text-left hover:bg-indigo-100/70 transition-colors block"
-          >
-            {t.authModal.demoHint}
-          </button>
 
           <button
             type="submit"
