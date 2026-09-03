@@ -98,12 +98,6 @@ export function Navbar() {
             >
               FAQ
             </a>
-            <Link
-              href="/contact-sales"
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-            >
-              {t.nav.onPremises}
-            </Link>
           </nav>
 
           {/* Right Action CTA & Controls */}
@@ -203,13 +197,6 @@ export function Navbar() {
           >
             FAQ
           </a>
-          <Link
-            href="/contact-sales"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            {t.nav.onPremises}
-          </Link>
           <div className="pt-2 border-t border-gray-100 dark:border-gray-800 flex flex-col gap-2">
             {isAuthenticated ? (
               <>
