@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # 1. Self-Hosted Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:v1.12.1
+    container_name: docubrain-qdrant
+    restart: always
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__API_KEY=${QDRANT_API_KEY:-enterprise-secret-key-998}
+
+  # 2. Local PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: docubrain-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: docubrain_enterprise
+      POSTGRES_USER: docubrain
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-docubrain_secure_pass_2026}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  # 3. DocuBrain Application Container
+  docubrain-app:
+    image: ghcr.io/docubrain/docubrain-enterprise:latest
+    container_name: docubrain-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - qdrant
+      - postgres
+    environment:
+      - NODE_ENV=production
+      - IS_ON_PREMISES=true
+      - DATABASE_URL=postgresql://docubrain:${POSTGRES_PASSWORD:-docubrain_secure_pass_2026}@postgres:5432/docubrain_enterprise
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_API_KEY=${QDRANT_API_KEY:-enterprise-secret-key-998}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-enterprise-32-character-secret-key-here}
+
+volumes:
+  qdrant_storage:
+  postgres_data:
