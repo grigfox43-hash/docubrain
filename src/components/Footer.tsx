@@ -54,11 +54,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact-sales" className="hover:text-indigo-600 dark:hover:text-indigo-400">
-                  {t.nav.onPremises}
-                </Link>
-              </li>
-              <li>
                 <a href="/#faq" className="hover:text-indigo-600 dark:hover:text-indigo-400">
                   FAQ
                 </a>
@@ -88,7 +83,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact-sales" className="hover:text-indigo-600 dark:hover:text-indigo-400">
+                <Link href="/security" className="hover:text-indigo-600 dark:hover:text-indigo-400">
                   {language === "en" ? "Security Team" : "Отдел безопасности"}
                 </Link>
               </li>

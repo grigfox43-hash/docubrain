@@ -125,12 +125,12 @@ export default function SecurityPage() {
             <span className="text-xs text-gray-500">
               Нужно подписать NDA или заполнить опросник безопасности вашей IT-службы?
             </span>
-            <Link
-              href="/contact-sales?topic=security"
+            <a
+              href="mailto:security@docubrain.io"
               className="px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-semibold shrink-0"
             >
-              Связаться с отделом безопасности
-            </Link>
+              security@docubrain.io
+            </a>
           </div>
         </div>
       </main>

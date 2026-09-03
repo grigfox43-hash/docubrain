@@ -100,12 +100,12 @@ export default function HomePage() {
                 <span>{t.hero.ctaDemo}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
-              <Link
-                href="/contact-sales"
+              <a
+                href="#how-it-works"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/80 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 font-medium text-base transition-colors"
               >
-                <span>{t.hero.ctaOnPrem}</span>
-              </Link>
+                <span>{t.nav.howItWorks}</span>
+              </a>
             </div>
           </div>
 
@@ -257,12 +257,6 @@ export default function HomePage() {
                 >
                   <span>{t.security.btnMore}</span>
                   <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/contact-sales"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-700 hover:bg-gray-800 text-gray-200 font-medium text-sm transition-colors"
-                >
-                  <span>{t.security.btnAudit}</span>
                 </Link>
               </div>
             </div>
@@ -558,12 +552,6 @@ const searchResult = await qdrant.search({
               <Sparkles className="w-5 h-5 text-indigo-700" />
               <span>{t.ctaBanner.btnLaunch}</span>
             </button>
-            <Link
-              href="/contact-sales"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-indigo-400/50 hover:bg-indigo-800 text-white font-medium text-base transition-colors"
-            >
-              <span>{t.ctaBanner.btnContact}</span>
-            </Link>
           </div>
         </div>
       </section>
