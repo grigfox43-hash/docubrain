@@ -4,6 +4,7 @@ import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import { AuthProvider } from "@/lib/auth/AuthContext";
 import { ThemeProvider } from "@/lib/theme/ThemeContext";
 import { AuthModal } from "@/components/AuthModal";
+import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 
 export const metadata: Metadata = {
   title: "DocuBrain — Корпоративный AI-ассистент по регламентам без риска утечки данных",
@@ -69,6 +70,7 @@ export default function RootLayout({
             <AuthProvider>
               {children}
               <AuthModal />
+              <CookieConsentBanner />
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>

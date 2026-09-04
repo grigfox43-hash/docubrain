@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { BrainCircuit, X, Mail, Lock, User, Building, ArrowRight, CheckCircle2 } from "lucide-react";
@@ -16,6 +17,7 @@ export function AuthModal() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
+  const [consentChecked, setConsentChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -39,6 +41,15 @@ export function AuthModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (activeTab === "register" && !consentChecked) {
+      setError(
+        language === "en"
+          ? "Please agree to the Privacy Policy and Terms of Service to register."
+          : "Пожалуйста, подтвердите согласие с Политикой конфиденциальности и Условиями использования (152-ФЗ, GDPR)."
+      );
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -223,6 +234,39 @@ export function AuthModal() {
             </div>
           </div>
 
+          {activeTab === "register" && (
+            <div className="flex items-start gap-2.5 pt-1">
+              <input
+                type="checkbox"
+                id="authConsent"
+                checked={consentChecked}
+                onChange={(e) => setConsentChecked(e.target.checked)}
+                className="mt-0.5 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 shrink-0 cursor-pointer"
+              />
+              <label
+                htmlFor="authConsent"
+                className="text-[11px] text-gray-600 dark:text-gray-400 leading-tight cursor-pointer select-none"
+              >
+                {t.legal.consentCheckboxPrefix}
+                <Link
+                  href="/privacy"
+                  target="_blank"
+                  className="text-indigo-600 dark:text-indigo-400 underline font-medium hover:text-indigo-700"
+                >
+                  {t.legal.consentCheckboxPrivacy}
+                </Link>
+                {t.legal.consentCheckboxAnd}
+                <Link
+                  href="/terms"
+                  target="_blank"
+                  className="text-indigo-600 dark:text-indigo-400 underline font-medium hover:text-indigo-700"
+                >
+                  {t.legal.consentCheckboxTerms}
+                </Link>
+                {t.legal.consentCheckboxLaw}
+              </label>
+            </div>
+          )}
 
           <button
             type="submit"

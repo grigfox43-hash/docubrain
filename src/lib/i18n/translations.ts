@@ -117,6 +117,35 @@ export interface Translations {
     docLimit: string;
     toSite: string;
   };
+  cookies: {
+    bannerTitle: string;
+    bannerText: string;
+    acceptAll: string;
+    essentialOnly: string;
+    preferences: string;
+    modalTitle: string;
+    modalSubtitle: string;
+    essentialTitle: string;
+    essentialDesc: string;
+    analyticsTitle: string;
+    analyticsDesc: string;
+    save: string;
+    doNotSellTitle: string;
+    doNotSellDesc: string;
+    doNotSellConfirmed: string;
+  };
+  legal: {
+    nonPublicOffer: string;
+    aiDisclosure: string;
+    ageNotice: string;
+    cookieSettings: string;
+    doNotSell: string;
+    consentCheckboxPrefix: string;
+    consentCheckboxPrivacy: string;
+    consentCheckboxAnd: string;
+    consentCheckboxTerms: string;
+    consentCheckboxLaw: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -252,6 +281,35 @@ export const translations: Record<Language, Translations> = {
       docLimit: "Использование лимита документов",
       toSite: "На сайт",
     },
+    cookies: {
+      bannerTitle: "Мы уважаем вашу конфиденциальность",
+      bannerText: "Мы используем файлы cookie и технические идентификаторы для обеспечения работы платформы, безопасной авторизации и аналитики. Вы можете настроить категории или принять все условия (GDPR, 152-ФЗ, CCPA).",
+      acceptAll: "Принять все",
+      essentialOnly: "Только обязательные",
+      preferences: "Настроить",
+      modalTitle: "Настройки конфиденциальности и файлов Cookie",
+      modalSubtitle: "Управляйте категориями данных в соответствии с регламентами GDPR (ЕС), 152-ФЗ (РФ) и CCPA/CPRA (США).",
+      essentialTitle: "Технические и обязательные (Always Active)",
+      essentialDesc: "Необходимы для работы сессий, авторизации, токенов безопасности и сохранения выбранного языка/темы. Не могут быть отключены.",
+      analyticsTitle: "Аналитические и эксплуатационные",
+      analyticsDesc: "Помогают анализировать качество ответов ИИ, частоту неотвеченных вопросов и быстродействие без продажи ваших данных третьим лицам.",
+      save: "Сохранить настройки",
+      doNotSellTitle: "Не продавать и не передавать мои данные (CCPA/CPRA)",
+      doNotSellDesc: "DocuBrain не продает и не передает персональные данные брокерам данных. Ваши регламенты изолированы строгим фильтром tenant_id.",
+      doNotSellConfirmed: "Отказ от передачи данных зафиксирован",
+    },
+    legal: {
+      nonPublicOffer: "Информация на сайте носит справочно-информационный характер и не является публичной офертой (ст. 437 ГК РФ). Все права защищены.",
+      aiDisclosure: "DocuBrain является B2B AI-сервисом на базе Google Gemini. Ответы генерируются автоматически на основе загруженных регламентов компании. Сервис предназначен для лиц от 18 лет.",
+      ageNotice: "18+ • B2B Platform",
+      cookieSettings: "Настройки Cookies",
+      doNotSell: "Не продавать мои данные (CCPA)",
+      consentCheckboxPrefix: "Я даю согласие на обработку персональных данных согласно ",
+      consentCheckboxPrivacy: "Политике конфиденциальности",
+      consentCheckboxAnd: " и принимаю ",
+      consentCheckboxTerms: "Условия использования",
+      consentCheckboxLaw: " (152-ФЗ, GDPR, CCPA).",
+    },
   },
   en: {
     nav: {
@@ -384,6 +442,35 @@ export const translations: Record<Language, Translations> = {
       connectNotion: "Connect Notion",
       docLimit: "Document Limit Usage",
       toSite: "Back to Site",
+    },
+    cookies: {
+      bannerTitle: "We value your privacy",
+      bannerText: "We use cookies and technical identifiers to ensure platform reliability, secure authentication, and telemetry. You can customize preferences or accept all terms (GDPR, CCPA, 152-FZ).",
+      acceptAll: "Accept All",
+      essentialOnly: "Essential Only",
+      preferences: "Customize",
+      modalTitle: "Privacy & Cookie Preferences",
+      modalSubtitle: "Manage your data categories in compliance with GDPR (EU), CCPA/CPRA (US), and 152-FZ (RU).",
+      essentialTitle: "Technical & Necessary (Always Active)",
+      essentialDesc: "Essential for secure sessions, authentication, CSRF tokens, and saving language/theme choices. Cannot be deactivated.",
+      analyticsTitle: "Analytics & Performance",
+      analyticsDesc: "Helps monitor AI response latency, unanswered questions, and system health without selling or sharing your data with third parties.",
+      save: "Save Preferences",
+      doNotSellTitle: "Do Not Sell or Share My Personal Information (CCPA/CPRA)",
+      doNotSellDesc: "DocuBrain never sells or rents corporate documents or personal data to data brokers. Your content is strictly isolated by tenant_id.",
+      doNotSellConfirmed: "Do Not Sell/Share preference recorded",
+    },
+    legal: {
+      nonPublicOffer: "The information on this website is for informational purposes only and does not constitute a public offer. All rights reserved.",
+      aiDisclosure: "DocuBrain is a B2B AI platform powered by Google Gemini. Responses are generated algorithmically based on provided company documents. For users 18+.",
+      ageNotice: "18+ • Enterprise B2B",
+      cookieSettings: "Cookie Preferences",
+      doNotSell: "Do Not Sell My Info (CCPA)",
+      consentCheckboxPrefix: "I agree to the processing of personal data in accordance with the ",
+      consentCheckboxPrivacy: "Privacy Policy",
+      consentCheckboxAnd: " and accept the ",
+      consentCheckboxTerms: "Terms of Service",
+      consentCheckboxLaw: " (GDPR, CCPA, 152-FZ).",
     },
   },
 };

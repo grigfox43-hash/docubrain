@@ -83,16 +83,45 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/security" className="hover:text-indigo-600 dark:hover:text-indigo-400">
-                  {language === "en" ? "Security Team" : "Отдел безопасности"}
-                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new CustomEvent("docubrain_open_preferences"));
+                    }
+                  }}
+                  className="hover:text-indigo-600 dark:hover:text-indigo-400 text-left transition-colors cursor-pointer"
+                >
+                  {t.legal.cookieSettings}
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(
+                        new CustomEvent("docubrain_open_preferences", { detail: { doNotSell: true } })
+                      );
+                    }
+                  }}
+                  className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline text-left cursor-pointer"
+                >
+                  {t.legal.doNotSell}
+                </button>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 dark:text-gray-400 gap-4">
-          <p>© {new Date().getFullYear()} DocuBrain Inc. Multi-tenant Enterprise RAG.</p>
+        {/* Legal Disclaimers & Notices (38-FZ, 437 GK RF, EU AI Act, FTC) */}
+        <div className="mt-10 pt-6 border-t border-gray-100 dark:border-gray-800/80 space-y-3 text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+          <p>{t.legal.nonPublicOffer}</p>
+          <p>{t.legal.aiDisclosure}</p>
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 dark:text-gray-400 gap-4">
+          <p>© {new Date().getFullYear()} DocuBrain Inc. Enterprise RAG Platform. {t.legal.ageNotice}</p>
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
